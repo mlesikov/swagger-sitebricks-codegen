@@ -1,0 +1,1 @@
+{{#hasBodyParam}}Request request{{#hasPathParams}}, {{/hasPathParams}}{{/hasBodyParam}}{{#hasQueryParams}}Request request{{#hasPathParams}}, {{/hasPathParams}}{{/hasQueryParams}}{{#pathParams}}@Named("{{paramName}}") {{{dataType}}} {{paramName}}{{#hasMore}}, {{/hasMore}}{{/pathParams}}

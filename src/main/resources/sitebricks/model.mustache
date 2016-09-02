@@ -1,0 +1,17 @@
+package {{package}};
+
+import java.util.Objects;
+{{#imports}}import {{import}};
+{{/imports}}
+{{#gson}}import com.google.gson.annotations.SerializedName;{{/gson}}
+
+{{#serializableModel}}import java.io.Serializable;{{/serializableModel}}
+{{#models}}
+{{#model}}{{#description}}
+/**
+ * {{description}}
+ **/{{/description}}
+{{#isEnum}}{{>enumOuterClass}}{{/isEnum}}
+{{^isEnum}}{{>pojo}}{{/isEnum}}
+{{/model}}
+{{/models}}

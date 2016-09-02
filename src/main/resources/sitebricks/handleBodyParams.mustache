@@ -1,0 +1,7 @@
+{{#hasBodyParam}}{{#bodyParams}}
+           //{{description}}
+           {{^isListContainer}}{{{dataType}}} {{paramName}} = request.read({{{dataType}}}.class).as(GsonTransport.class);{{/isListContainer}}
+           {{#isListContainer}}TypeLiteral<{{{dataType}}}> {{paramName}}typeLiteral = new TypeLiteral<{{{dataType}}}>(){};
+                              {{{dataType}}} {{paramName}} = request.read({{paramName}}typeLiteral).as(GsonTransport.class);{{/isListContainer}}
+{{/bodyParams}}{{/hasBodyParam}}
+           {{#hasBodyParam}}//TODO: logic here{{/hasBodyParam}}

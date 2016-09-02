@@ -1,0 +1,2 @@
+{{#hasQueryParams}}{{#queryParams}}{{{dataType}}} {{paramName}} = request.param("{{paramName}}");{{#isListContainer}}//TODO: parse the list on your own{{/isListContainer}}
+           {{/queryParams}}{{/hasQueryParams}}{{#hasQueryParams}}//TODO: logic here{{/hasQueryParams}}
