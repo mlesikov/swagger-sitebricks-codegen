@@ -31,8 +31,8 @@ public class SitebricksGenerator extends AbstractJavaCodegen implements CodegenC
   /**
    * Configures the type of generator.
    *
-   * @return  the CodegenType for this generator
-   * @see     io.swagger.codegen.CodegenType
+   * @return the CodegenType for this generator
+   * @see io.swagger.codegen.CodegenType
    */
   public CodegenType getTag() {
     return CodegenType.SERVER;
@@ -59,8 +59,8 @@ public class SitebricksGenerator extends AbstractJavaCodegen implements CodegenC
   }
 
 
-   protected String title = "JAVA Sitebricks REST";
-   protected String implFolder = "src/main/java";
+  protected String title = "JAVA Sitebricks REST";
+  protected String implFolder = "src/main/java";
 
   public SitebricksGenerator() {
     super();
@@ -69,28 +69,27 @@ public class SitebricksGenerator extends AbstractJavaCodegen implements CodegenC
     this.projectFolder = "io.foo.bar";
 
 //         sourceFolder = "src/gen/java";
-         apiTestTemplateFiles.clear(); // TODO: add test template
+    apiTestTemplateFiles.clear(); // TODO: add test template
 //         embeddedTemplateDir = templateDir = "JavaInflector";
 //         embeddedTemplateDir = templateDir = "JavaSiteBricksREST";
 //         invokerPackage = "io.swagger.handler";
 //         artifactId = "swagger-inflector-server";   // in the pom, not needed
 //         dateLibrary = "legacy"; //TODO: add joda support
 
-         // clear model and api doc template as this codegen
-         // does not support auto-generated markdown doc at the moment
-         //TODO: add doc templates
-         modelDocTemplateFiles.remove("model_doc.mustache");
-         apiDocTemplateFiles.remove("api_doc.mustache");
+    // clear model and api doc template as this codegen
+    // does not support auto-generated markdown doc at the moment
+    //TODO: add doc templates
+    modelDocTemplateFiles.remove("model_doc.mustache");
+    apiDocTemplateFiles.remove("api_doc.mustache");
 
 
 //         apiPackage = System.getProperty("swagger.codegen.inflector.apipackage", "io.swagger.handler");
 //         modelPackage = System.getProperty("swagger.codegen.inflector.modelpackage", "io.swagger.model");
 
-         additionalProperties.put("title", title);
-         // java inflector uses the gson lib
-         additionalProperties.put("gson", "true");
+    additionalProperties.put("title", title);
+    // java inflector uses the gson lib
+    additionalProperties.put("gson", "true");
 //         additionalProperties.put("jackson", "true");
-
 
 
     // set the output folder here
@@ -138,10 +137,10 @@ public class SitebricksGenerator extends AbstractJavaCodegen implements CodegenC
     /**
      * Reserved words.  Override this with reserved words specific to your language
      */
-    reservedWords = new HashSet<String> (
-      Arrays.asList(
-        "sample1",  // replace with static values
-        "sample2")
+    reservedWords = new HashSet<String>(
+            Arrays.asList(
+                    "sample1",  // replace with static values
+                    "sample2")
     );
 
     /**
@@ -190,7 +189,7 @@ public class SitebricksGenerator extends AbstractJavaCodegen implements CodegenC
     return outputFolder + "/" + sourceFolder + "/" + modelPackage().replace('.', File.separatorChar);
   }
 
-//  /**
+  //  /**
 //   * Location to write api files.  You can use the apiPackage() as defined when the class is
 //   * instantiated
 //   */
@@ -211,24 +210,23 @@ public class SitebricksGenerator extends AbstractJavaCodegen implements CodegenC
   public String getSwaggerType(Property p) {
     String swaggerType = super.getSwaggerType(p);
     String type = null;
-    if(typeMapping.containsKey(swaggerType)) {
+    if (typeMapping.containsKey(swaggerType)) {
       type = typeMapping.get(swaggerType);
-      if(languageSpecificPrimitives.contains(type))
+      if (languageSpecificPrimitives.contains(type))
         return toModelName(type);
-    }
-    else
+    } else
       type = swaggerType;
     return toModelName(type);
   }
 
-   @Override
-   public void processOpts() {
-       super.processOpts();
-       supportingFiles.add(new SupportingFile("swagger.mustache",
-                       "resources/io/foo/bar",
-                       "swagger.yaml")
-       );
-   }
+  @Override
+  public void processOpts() {
+    super.processOpts();
+    supportingFiles.add(new SupportingFile("swagger.mustache",
+            "resources/io/foo/bar",
+            "swagger.yaml")
+    );
+  }
 
   @Override
   public String sanitizeName(String packageName) {
@@ -263,52 +261,53 @@ public class SitebricksGenerator extends AbstractJavaCodegen implements CodegenC
     }
     opList.add(co);
     co.baseName = basePath;
-    CustomCodeGenOperation op = (CustomCodeGenOperation)co;
-    op.httpMethodCapitalized =  capitalize(co.httpMethod);
+    CustomCodeGenOperation op = (CustomCodeGenOperation) co;
+    op.httpMethodCapitalized = capitalize(co.httpMethod);
 
-    if(op.path !=null && op.path.contains("{")) {
-      op.methodPath = op.path.replaceAll("\\{", ":").replaceAll("\\}","");
+    if (op.path != null && op.path.contains("{")) {
+      op.methodPath = op.path.replaceAll("\\{", ":").replaceAll("\\}", "");
     }
-    if("".equals(op.methodPath)){
+    if ("".equals(op.methodPath)) {
       op.methodPath = null;
     }
 
   }
-  String capitalize(String s) {
-        String s1 = s.substring(0,1).toUpperCase();
-        String sTitle = s1 + s.substring(1).toLowerCase();
-        return sTitle;
-   }
 
-   @Override
-   public void postProcessModelProperty(CodegenModel model, CodegenProperty property) {
-       super.postProcessModelProperty(model, property);
+  private String capitalize(String s) {
+    String s1 = s.substring(0, 1).toUpperCase();
+    String sTitle = s1 + s.substring(1).toLowerCase();
+    return sTitle;
+  }
 
-     model.imports.remove("ApiModel");
-     model.imports.remove("ApiModelProperty");
+  @Override
+  public void postProcessModelProperty(CodegenModel model, CodegenProperty property) {
+    super.postProcessModelProperty(model, property);
 
-   }
+    model.imports.remove("ApiModel");
+    model.imports.remove("ApiModelProperty");
 
-   @Override
-   public Map<String, Object> postProcessSupportingFileData(Map<String, Object> objs) {
-       Swagger swagger = (Swagger)objs.get("swagger");
-       if(swagger != null) {
-           try {
-               objs.put("swagger-yaml", Yaml.mapper().writeValueAsString(swagger));
-           } catch (JsonProcessingException e) {
-               LOGGER.error(e.getMessage(), e);
-           }
-       }
-       return super.postProcessSupportingFileData(objs);
-   }
+  }
 
-   @Override
-   public String toApiName(String name) {
-       if (name.length() == 0) {
-           return "DefaultController";
-       }
-       name = name.replaceAll("[^a-zA-Z0-9]+", "_"); // FIXME: a parameter should not be assigned. Also declare the methods parameters as 'final'.
-       return camelize(name)+ "Service";
-   }
+  @Override
+  public Map<String, Object> postProcessSupportingFileData(Map<String, Object> objs) {
+    Swagger swagger = (Swagger) objs.get("swagger");
+    if (swagger != null) {
+      try {
+        objs.put("swagger-yaml", Yaml.mapper().writeValueAsString(swagger));
+      } catch (JsonProcessingException e) {
+        LOGGER.error(e.getMessage(), e);
+      }
+    }
+    return super.postProcessSupportingFileData(objs);
+  }
+
+  @Override
+  public String toApiName(String name) {
+    if (name.length() == 0) {
+      return "DefaultController";
+    }
+    name = name.replaceAll("[^a-zA-Z0-9]+", "_"); // FIXME: a parameter should not be assigned. Also declare the methods parameters as 'final'.
+    return camelize(name) + "Service";
+  }
 
 }
