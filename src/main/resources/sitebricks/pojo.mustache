@@ -16,11 +16,8 @@ public class {{classname}} {{#parent}}extends {{{parent}}}{{/parent}} {{#seriali
   {{#jackson}}
   @JsonProperty("{{baseName}}")
   {{/jackson}}
-  {{#gson}}
-  @SerializedName("{{baseName}}")
-  {{/gson}}
-  public final {{{datatypeWithEnum}}} {{name}};
 
+  public final {{{datatypeWithEnum}}} {{name}};
   {{/vars}}
 
    private {{classname}}() {
